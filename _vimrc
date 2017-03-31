@@ -1,20 +1,23 @@
 call plug#begin()
 " Main
 Plug 'airblade/vim-rooter'
-Plug 'mattn/emmet-vim', { 'for': ['html','xhtml','css','sass','scss','xml'] }
+Plug 'mattn/emmet-vim',        { 'for': ['html','xhtml','css','sass','scss','xml'] }
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'   | Plug 'honza/vim-snippets'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround' | Plug 'tpope/vim-repeat'
 
+" Syntax
+Plug 'sheerun/vim-polyglot'
+
 " Other
-Plug 'jiangmiao/auto-pairs'  " alt-p / ctrl-v to disable in insert mode
-Plug 't9md/vim-choosewin'    " - to choose window
+Plug 'jiangmiao/auto-pairs'      " alt-p / ctrl-v to disable in insert mode
+Plug 't9md/vim-choosewin'        " - to choose window
 Plug 'wellle/targets.vim'
-Plug 'tommcdo/vim-lion'      " gl / gL
-Plug 'kkoenig/wimproved.vim' " F9 to center window
-Plug 'easymotion/vim-easymotion'
-Plug 'scrooloose/nerdtree'
+Plug 'junegunn/vim-easy-align'   " ga
+Plug 'kkoenig/wimproved.vim'     " F9 to center window
+Plug 'easymotion/vim-easymotion' " <leader><leader>
+Plug 'scrooloose/nerdtree'       " F8 / <leader>e
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " For future research
@@ -22,7 +25,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 " Plug 'kien/ctrlp.vim'
 " Plug 'Valloric/MatchTagAlways', { 'for': ['html'] }
 
-" Themes
+" Colorschemes
 Plug 'MaxSt/FlatColor'
 " Plug 'joshdick/onedark.vim'
 " Plug 'cocopon/iceberg.vim'
@@ -53,9 +56,15 @@ set backspace=indent,eol,start          " fix backspace on my machine
 set noerrorbells visualbell t_vb=       " turn off error sound
 autocmd GUIEnter * set visualbell t_vb= " turn off error sound
 
-set nobackup
-set nowritebackup
-set noswapfile
+" set nobackup
+" set nowritebackup
+" set noswapfile
+
+set undofile
+set undodir=~/vimfiles/.undo//
+set directory=~/vimfiles/.swp//
+set backup
+set backupdir=~/vimfiles/.backup//
 
 set expandtab 
 " set softtabstop=0 
@@ -75,12 +84,12 @@ nnoremap <leader>v :sp **/*
 nnoremap <leader>h :vsp **/*
 nnoremap <leader>t :tabe **/*
 nnoremap <leader>F :e <C-R>=expand('%:h').'/'<CR>
-nnoremap <leader>S :sp <C-R>=expand('%:h').'/'<CR>
-nnoremap <leader>V :vsp sfind <C-R>=expand('%:h').'/'<CR>
+nnoremap <leader>V :sp <C-R>=expand('%:h').'/'<CR>
+nnoremap <leader>H :vsp sfind <C-R>=expand('%:h').'/'<CR>
 nnoremap <leader>T :tabe <C-R>=expand('%:h').'/'<CR>
 
 let g:rooter_change_directory_for_non_project_files = 'current'
-let g:rooter_patterns = ['.git', 'Rakefile', '.ctrlp', '.tern-project', 'index.html', '.root']
+let g:rooter_patterns = ['.git', 'Rakefile', 'index.html']
 
 " set path=.,**
 " set path +=./**
@@ -173,6 +182,13 @@ let g:NERDTreeIndicatorMapCustom = {
     \ 'Ignored'   : '☒',
     \ "Unknown"   : "?"
     \ }
+
+"====={ Xuyuanp/nerdtree-git-plugin }=====
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 
 "=====[ Mapping ]=====
