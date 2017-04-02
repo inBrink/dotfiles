@@ -1,3 +1,4 @@
+" vim-plug {{{
 call plug#begin()
 " Main
 Plug 'airblade/vim-rooter'
@@ -33,10 +34,12 @@ Plug 'MaxSt/FlatColor'
 " Plug 'larsbs/vimterial'
 " Plug 'ajh17/Spacegray.vim'
 call plug#end()
+" }}}
 
 
-"=====[ Basic ]=====
+" Basic {{{
 let mapleader = "\<Space>"
+let maplocalleader = "\\"
 set number                              " line's number
 set rnu                                 " relative numbers
 set shortmess=a                         " avoiding the HIT ENTER to continue
@@ -71,9 +74,10 @@ set expandtab
 " set softtabstop=0 
 set tabstop=2 
 set shiftwidth=2
+" }}}
 
 
-"=====[ Open/search files in working directory ]=====
+" Open/search files in working directory {{{
 set wildmenu
 set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
 set wildignore+=*.pdf,*.psd
@@ -96,9 +100,10 @@ let g:rooter_patterns = ['.git', 'Rakefile', 'index.html']
 " set path +=./**
 " set autochdir
 " set wildcharm=<C-z>
+" }}}
 
 
-"=====[ Fonts (render settings) ]=====
+" Fonts (render settings) {{{
 " set guifont=Hack:h11
 set guifont=Iosevka:h16
 " set guifont=Inconsolata:h14
@@ -106,18 +111,19 @@ set guifont=Iosevka:h16
 if has("win32")
   set renderoptions=type:directx,gamma:1.0,contrast:0.2,level:1.0,geom:1,renmode:5,taamode:1
 endif
+" }}}
 
-
-"=====[ Colorscheme/themes ]=====
+" Colorscheme/themes {{{
 colorscheme Flatcolor
 " colorscheme atom-dark
 " colorscheme iceberg
 " colorscheme onedark
 " colorscheme vimterial
 " colorscheme Spacegray
+" }}}
 
 
-"=====[ Plugins settings ]=====
+" Plugins settings {{{
 
 "====={ t9md/vim-choosewin }=====
 nmap - <Plug>(choosewin)
@@ -194,9 +200,10 @@ nmap ga <Plug>(EasyAlign)
 "====={ machakann/vim-highlightedyank }=====
 map y <Plug>(highlightedyank)
 let g:highlightedyank_highlight_duration = 300
+" }}}
 
 
-"=====[ Mapping ]=====
+" Mapping {{{
 
 nnoremap <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
 
@@ -206,8 +213,11 @@ endif
 
 nnoremap Q @q
 
+inoremap <bs> <nop>
+" }}}
 
-"=====[ Improve defaults / Functions ]=====
+
+" Improve defaults / Functions {{{
 
 "start insert with indent if line was indented
 function! IndentWithI()
@@ -235,3 +245,29 @@ autocmd BufWritePre,FileWritePre * :call <SID>AutoMakeDirectory()
 if has("gui_running")
   set lines=33 columns=130
 endif
+" }}}
+
+
+"Vimscript tests
+" map x :echo 'work'<cr>
+" unmap x
+" imap <c-m> <esc>viW~A
+" some_test_variable
+" autocmd BufWritePre * command
+" autocmd BufNewFile * command
+" autocmd BufNewFile,BufWritePre * command
+" autocmd BufNewFile,BufWritePre *.html setlocal nowrap
+" autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
+" :help autocmd-events
+
+" autocmd {{{
+augroup filetype_html
+  autocmd!
+  autocmd FileType html nnoremap <buffer> <localleader>w :set wrap!<cr>
+augroup END
+
+augroup filetype_vim
+    autocmd!
+    autocmd FileType vim setlocal foldmethod=marker
+augroup END
+" }}}
