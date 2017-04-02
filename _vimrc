@@ -17,8 +17,9 @@ Plug 'wellle/targets.vim'
 Plug 'junegunn/vim-easy-align'   " ga
 Plug 'kkoenig/wimproved.vim'     " F9 to center window
 Plug 'easymotion/vim-easymotion' " <leader><leader>
-Plug 'scrooloose/nerdtree'       " F8 / <leader>e
+Plug 'scrooloose/nerdtree', { 'on':  [ 'NERDTreeToggle', 'NERDTreeFind' ] } " F8 / <leader>e 
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'machakann/vim-highlightedyank'
 
 " For future research
 " Plug 'tpope/vim-fugitive'
@@ -99,7 +100,7 @@ let g:rooter_patterns = ['.git', 'Rakefile', 'index.html']
 
 "=====[ Fonts (render settings) ]=====
 " set guifont=Hack:h11
-set guifont=Iosevka:h12
+set guifont=Iosevka:h16
 " set guifont=Inconsolata:h14
 
 if has("win32")
@@ -190,6 +191,10 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
+"====={ machakann/vim-highlightedyank }=====
+map y <Plug>(highlightedyank)
+let g:highlightedyank_highlight_duration = 300
+
 
 "=====[ Mapping ]=====
 
@@ -198,6 +203,8 @@ nnoremap <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)
 if has("win32")
   nnoremap <silent> <F5> :update<Bar>silent !start "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" "file://%:p"<CR>
 endif
+
+nnoremap Q @q
 
 
 "=====[ Improve defaults / Functions ]=====
@@ -226,5 +233,5 @@ autocmd BufWritePre,FileWritePre * :call <SID>AutoMakeDirectory()
 
 " Vim size (line, columns)
 if has("gui_running")
-  set lines=37 columns=130
+  set lines=33 columns=130
 endif
