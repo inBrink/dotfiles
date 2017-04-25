@@ -8,6 +8,11 @@ Plug 'SirVer/ultisnips'   | Plug 'honza/vim-snippets'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround' | Plug 'tpope/vim-repeat'
 
+" Splits, windows, explorers
+Plug 'scrooloose/nerdtree' " { 'on':  [ 'NERDTreeToggle', 'NERDTreeFind' ] } \" F8 / <leader>e 
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'zhaocai/GoldenView.Vim'
+
 " Syntax
 Plug 'sheerun/vim-polyglot'
 
@@ -18,8 +23,6 @@ Plug 'wellle/targets.vim'
 Plug 'junegunn/vim-easy-align'   " ga
 Plug 'kkoenig/wimproved.vim'     " F9 to center window
 Plug 'easymotion/vim-easymotion' " <leader><leader>
-Plug 'scrooloose/nerdtree', { 'on':  [ 'NERDTreeToggle', 'NERDTreeFind' ] } " F8 / <leader>e 
-Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'machakann/vim-highlightedyank'
 
 " For future research
@@ -29,6 +32,7 @@ Plug 'machakann/vim-highlightedyank'
 
 " Colorschemes
 Plug 'MaxSt/FlatColor'
+Plug 'NLKNguyen/papercolor-theme'
 " Plug 'joshdick/onedark.vim'
 " Plug 'cocopon/iceberg.vim'
 " Plug 'larsbs/vimterial'
@@ -104,8 +108,8 @@ let g:rooter_patterns = ['.git', 'Rakefile', 'index.html']
 
 
 " Fonts (render settings) {{{
-" set guifont=Hack:h11
-set guifont=Iosevka:h16
+set guifont=Hack:h11
+" set guifont=Iosevka:h16
 " set guifont=Inconsolata:h14
 
 if has("win32")
@@ -113,26 +117,31 @@ if has("win32")
 endif
 " }}}
 
+
 " Colorscheme/themes {{{
-colorscheme Flatcolor
+" colorscheme Flatcolor
+colorscheme PaperColor
 " colorscheme atom-dark
 " colorscheme iceberg
 " colorscheme onedark
 " colorscheme vimterial
 " colorscheme Spacegray
+
+set background=light
+" set background=dark
 " }}}
 
 
 " Plugins settings {{{
-
 "====={ t9md/vim-choosewin }=====
 nmap - <Plug>(choosewin)
 let g:choosewin_overlay_enable = 1
+let g:choosewin_label = 'iojklfdsa'
+" let g:choosewin_tablabel = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 "====={ mattn/emmet-vim }=====
 let g:user_emmet_expandabbr_key = '<a-space>'
 let g:user_emmet_mode='i' 
-let g:user_emmet_install_global = 0
 
 "====={ Valloric/YouCompleteMe }=====
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
@@ -162,8 +171,8 @@ map <Leader><Leader> <Plug>(easymotion-s)
 " nnoremap <Leader><Leader>f <Plug>(easymotion-overwin-f)
 
 "====={ scrooloose/nerdtree }=====
-nnoremap <F8> :NERDTreeToggle<cr>
-nnoremap <silent> <Leader>e :NERDTreeFind<CR>
+nnoremap <Leader>e :NERDTreeToggle<cr>
+nnoremap <silent> <Leader><s-e> :NERDTreeFind<CR>
 
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
@@ -171,6 +180,8 @@ let g:NERDTreeDirArrowCollapsible = '▾'
 let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
+let NERDTreeMapOpenSplit = 'v'
+let NERDTreeMapOpenVSplit = 'h'
 
 " autocmd StdinReadPre * let s:std_in=1
 " autocmd VimEnter * if argc() == 0 && !exists(“s:std_in”) | NERDTree | endif
@@ -200,11 +211,23 @@ nmap ga <Plug>(EasyAlign)
 "====={ machakann/vim-highlightedyank }=====
 map y <Plug>(highlightedyank)
 let g:highlightedyank_highlight_duration = 300
+
+"====={ zhaocai/GoldenView.Vim }=====
+" 1. split to tiled windows
+nmap <silent> <C-L>  <Plug>GoldenViewSplit
+
+" 2. quickly switch current window with the main pane
+" and toggle back
+nmap <silent> <F4>   <Plug>GoldenViewSwitchMain
+nmap <silent> <S-F4> <Plug>GoldenViewSwitchToggle
+
+" 3. jump to next and previous window
+nmap <silent> <a-j>  <Plug>GoldenViewNext
+nmap <silent> <a-k>  <Plug>GoldenViewPrevious
 " }}}
 
 
 " Mapping {{{
-
 nnoremap <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
 
 if has("win32")
@@ -218,7 +241,6 @@ inoremap <bs> <nop>
 
 
 " Improve defaults / Functions {{{
-
 "start insert with indent if line was indented
 function! IndentWithI()
   if len(getline('.')) == 0
@@ -248,7 +270,7 @@ endif
 " }}}
 
 
-"Vimscript tests
+"Vimscript tests"{{{
 " map x :echo 'work'<cr>
 " unmap x
 " imap <c-m> <esc>viW~A
@@ -259,6 +281,8 @@ endif
 " autocmd BufNewFile,BufWritePre *.html setlocal nowrap
 " autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
 " :help autocmd-events
+"}}}
+
 
 " autocmd {{{
 augroup filetype_html
@@ -269,5 +293,10 @@ augroup END
 augroup filetype_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
+augroup END
+
+augroup filetype_python
+    autocmd!
+    autocmd FileType python nnoremap <buffer> <silent> <localleader>i :!python %<cr>
 augroup END
 " }}}
