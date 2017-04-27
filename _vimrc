@@ -17,7 +17,7 @@ Plug 'zhaocai/GoldenView.Vim'
 Plug 'sheerun/vim-polyglot'
 
 " Other
-Plug 'jiangmiao/auto-pairs'      " alt-p / ctrl-v to disable in insert mode
+Plug 'jiangmiao/auto-pairs'      " alt-a / ctrl-v to disable in insert mode
 Plug 't9md/vim-choosewin'        " - to choose window
 Plug 'wellle/targets.vim'
 Plug 'junegunn/vim-easy-align'   " ga
@@ -26,7 +26,7 @@ Plug 'easymotion/vim-easymotion' " <leader><leader>
 Plug 'machakann/vim-highlightedyank'
 
 " For future research
-" Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 " Plug 'kien/ctrlp.vim'
 " Plug 'Valloric/MatchTagAlways', { 'for': ['html'] }
 
@@ -63,6 +63,7 @@ syntax on                               " disable/enable syntax
 set backspace=indent,eol,start          " fix backspace on my machine
 set noerrorbells visualbell t_vb=       " turn off error sound
 autocmd GUIEnter * set visualbell t_vb= " turn off error sound
+set clipboard^=unnamedplus,unnamed
 
 " set nobackup
 " set nowritebackup
@@ -83,10 +84,11 @@ set shiftwidth=2
 
 " Open/search files in working directory {{{
 set wildmenu
-set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
-set wildignore+=*.pdf,*.psd
-set wildignore+=node_modules/*,bower_components/*,.sass-cache/*,.git/*
-set wildignore+=prepros.cfg
+" set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
+" set wildignore+=*.pdf,*.psd
+" set wildignore+=node_modules/*,bower_components/*,.sass-cache/*,.git/*
+" set wildignore+=node_modules/*,bower_components/*,.sass-cache/*
+" set wildignore+=prepros.cfg
 
 nnoremap <leader>f :e **/*
 nnoremap <leader>v :sp **/*
@@ -224,6 +226,7 @@ nmap <silent> <S-F4> <Plug>GoldenViewSwitchToggle
 " 3. jump to next and previous window
 nmap <silent> <a-j>  <Plug>GoldenViewNext
 nmap <silent> <a-k>  <Plug>GoldenViewPrevious
+
 " }}}
 
 
@@ -237,6 +240,18 @@ endif
 nnoremap Q @q
 
 inoremap <bs> <nop>
+
+nnoremap H ^
+vnoremap H ^
+nnoremap L g_
+vnoremap L g_
+
+nnoremap <a-p> "0p
+nnoremap <a-P> "0P
+xnoremap <a-p> "0p
+xnoremap <a-P> "0P
+
+nnoremap Y :normal ^yg_<cr>
 " }}}
 
 
@@ -291,12 +306,13 @@ augroup filetype_html
 augroup END
 
 augroup filetype_vim
-    autocmd!
-    autocmd FileType vim setlocal foldmethod=marker
+  autocmd!
+  autocmd FileType vim setlocal foldmethod=marker
+  autocmd BufWritePost $MYVIMRC source $MYVIMRC
 augroup END
 
 augroup filetype_python
-    autocmd!
-    autocmd FileType python nnoremap <buffer> <silent> <localleader>i :!python %<cr>
+  autocmd!
+  autocmd FileType python nnoremap <buffer> <silent> <localleader>i :!python %<cr>
 augroup END
 " }}}
