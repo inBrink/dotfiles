@@ -135,6 +135,8 @@ if [ "$core_status" = "done" ]; then
   if [ "$answer2" = "y" ]
   then
     echo -e "\nok > gulp starting"
+    explorer .
     npm run gulp && npm run gulp watch
   fi
+  explorer .
 fi
