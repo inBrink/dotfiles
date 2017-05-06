@@ -78,6 +78,7 @@ if [ "$core_dir" = "git" ]; then
     mv core/* ./
     # mv ./core/{index.html,sass,js} ./
     rm -rf core
+    mkdir images
     echo "+ html,js,sass,images cloned"
   else
     echo "- fail to clone core"
