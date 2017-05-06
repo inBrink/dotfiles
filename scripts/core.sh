@@ -15,13 +15,24 @@ create_project_dir()
   read project_name
 }
 
+gems_install()
+{
+  gems=(compass susy breakpoint)
+  for i in ${gems[*]}; do
+    if gem list $i -i; then
+      echo gem "$i" already installed
+    else
+      gem install $i
+    fi
+  done
+}
+
 success_func()
 {
   echo "+ gulp created"
 
   npm install
-  if [ $? -eq 0 ]
-  then
+  if [ $? -eq 0 ]; then
     echo "+ npm install"
   else
     echo "- fail then intall npm"
@@ -32,8 +43,7 @@ create_scaffold()
 {
   echo "create empty scaffold (y/n)?"
   read answer
-  if [ "$answer" = "y" ]
-  then
+  if [ "$answer" = "y" ]; then
     #create files in directory
     mkdir sass js images
     touch index.html sass/main.scss js/scripts.js 
@@ -41,8 +51,9 @@ create_scaffold()
   fi
 }
 
-if [ $1 ]
-then
+core_status="done"
+
+if [ $1 ]; then
   project_name=$1
 else
   create_project_dir
@@ -59,13 +70,13 @@ mkdir $project_name
 echo "+ project directory created"
 cd $project_name
 
-if [ "$core_dir" = "git" ]
-then
+if [ "$core_dir" = "git" ]; then
   git clone git@gitlab.com:StudiaUtEdamVivo/core.git
 
-  if [ $? -eq 0 ]
-  then
-    mv ./core/{index.html,sass,js} ./
+  if [ $? -eq 0 ]; then
+    rm core/README.md && rm -rf core/.git
+    mv core/* ./
+    # mv ./core/{index.html,sass,js} ./
     rm -rf core
     echo "+ html,js,sass,images cloned"
   else
@@ -73,38 +84,39 @@ then
     create_scaffold
   fi
 else
-  cp ${core_dir}index.html ./ && cp -rf ${core_dir}sass/ ./sass/ && cp -rf ${core_dir}js/ ./js/
+  # cp ${core_dir}index.html ./ && cp -rf ${core_dir}sass/ ./sass/ && cp -rf ${core_dir}js/ ./js/
+  cp -r ${core_dir}* ./
 
-  if [ $? -eq 0 ]
-  then
+  if [ $? -eq 0 ]; then
+    rm README.md
     echo "+ html,js,sass,images copied"
   else
     echo "fail to copy files"
     create_scaffold
+    core_status="fail"
   fi
 fi
 
 #module bundler
-if [ "$gulp_directory" = "git" ]
-then
+if [ "$gulp_directory" = "git" -a "$core_status" = "done" ]; then
   git clone git@gitlab.com:StudiaUtEdamVivo/gulp.git
 
-  if [ $? -eq 0 ]
-  then
+  if [ $? -eq 0 ]; then
     mv ./gulp/{config.rb,gulpfile.js,package.json} ./
     rm -rf gulp
     success_func
   else
     echo "- fail to clone gulp repository"
+    core_status="fail"
   fi
 else
   cp ${gulp_directory}{gulpfile.js,config.rb,package.json} ./
 
-  if [ $? -eq 0 ]
-  then
+  if [ $? -eq 0 ]; then
     success_func
   else
     echo "- fail to clone gulp files"
+    core_status="fail"
   fi
 fi
 
@@ -115,9 +127,12 @@ echo "all done"
 echo "log:"
 ls -la
 
-echo "run gulpw? (y/n)"
-read answer2
-if [ "$answer2" = "y" ]
-then
-  npm run gulp && npm run gulp watch
+if [ "$core_status" = "done" ]; then
+  gems_install
+  echo "run gulpw? (y/n)"
+  read answer2
+  if [ "$answer2" = "y" ]
+  then
+    npm run gulp && npm run gulp watch
+  fi
 fi
