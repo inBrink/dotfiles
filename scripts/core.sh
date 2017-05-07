@@ -130,13 +130,13 @@ ls -la
 
 if [ "$core_status" = "done" ]; then
   gems_install
-  echo "run gulpw? (y/n)"
+  echo "run gulp? (y/n)"
   read -n 1 answer2
   if [ "$answer2" = "y" ]
   then
     echo -e "\nok > gulp starting"
     explorer .
-    npm run gulp && npm run gulp watch
+    npm run gulp
   fi
   explorer .
 fi
