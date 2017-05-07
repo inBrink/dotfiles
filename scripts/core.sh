@@ -1,11 +1,11 @@
 #OPTIONS
 #Change gulp_directory variable to gulp directory
 #if variable does not contain directory path - gulp will be download from "git@gitlab.com:StudiaUtEdamVivo/gulp.git"
-gulp_directory="git"
-# gulp_directory="I://Dropbox/CODE/templates/gulp/"
+# gulp_directory="git"
+gulp_directory="I://Dropbox/CODE/templates/gulp/"
 
-core_dir="git"
-# core_dir="I://Dropbox/CODE/core/"
+# core_dir="git"
+core_dir="I://Dropbox/CODE/core/"
 
 #SCRIPT, do not change
 #Functions
@@ -123,20 +123,22 @@ fi
 
 
 #log info
-echo "========"
-echo "all done"
-echo "log:"
-ls -la
+# echo "========"
+# echo "all done"
+# echo "log:"
+# ls -la
 
 if [ "$core_status" = "done" ]; then
   gems_install
+  npm run gulp production
+  echo "+ _production compiled"
   echo "run gulp? (y/n)"
   read -n 1 answer2
-  if [ "$answer2" = "y" ]
-  then
+  if [ "$answer2" = "y" ]; then
     echo -e "\nok > gulp starting"
     explorer .
     npm run gulp
+  else
+    explorer .
   fi
-  explorer .
 fi
