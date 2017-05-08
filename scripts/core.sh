@@ -1,11 +1,11 @@
 #OPTIONS
 #Change gulp_directory variable to gulp directory
 #if variable does not contain directory path - gulp will be download from "git@gitlab.com:StudiaUtEdamVivo/gulp.git"
-gulp_directory="git"
-# gulp_directory="I://Dropbox/CODE/templates/gulp/"
+# gulp_directory="git"
+gulp_directory="I://Dropbox/CODE/templates/gulp/"
 
-core_dir="git"
-# core_dir="I://Dropbox/CODE/core/"
+# core_dir="git"
+core_dir="I://Dropbox/CODE/core/"
 
 #SCRIPT, do not change
 #Functions
@@ -67,8 +67,9 @@ echo "--------------"
 
 #create project directory
 mkdir $project_name
+mkdir $project_name/source
 echo "+ project directory created"
-cd $project_name
+cd $project_name/source
 
 if [ "$core_dir" = "git" ]; then
   git clone git@gitlab.com:StudiaUtEdamVivo/core.git
@@ -97,6 +98,7 @@ else
     core_status="fail"
   fi
 fi
+cd ../
 
 #module bundler
 if [ "$gulp_directory" = "git" -a "$core_status" = "done" ]; then
@@ -130,8 +132,8 @@ fi
 
 if [ "$core_status" = "done" ]; then
   gems_install
-  npm run gulp production
-  echo "+ _production compiled"
+  # npm run gulp production
+  # echo "+ _production compiled"
   echo "run gulp? (y/n)"
   read -n 1 answer2
   if [ "$answer2" = "y" ]; then
