@@ -1,11 +1,11 @@
 #OPTIONS
 #Change gulp_directory variable to gulp directory
 #if variable does not contain directory path - gulp will be download from "git@gitlab.com:StudiaUtEdamVivo/gulp.git"
-# gulp_directory="git"
-gulp_directory="I://Dropbox/CODE/templates/gulp/"
+gulp_directory="git"
+# gulp_directory="I://Dropbox/CODE/templates/gulp/"
 
-# core_dir="git"
-core_dir="I://Dropbox/CODE/core/"
+core_dir="git"
+# core_dir="I://Dropbox/CODE/core/"
 
 #SCRIPT, do not change
 #Functions
