@@ -19,7 +19,7 @@ gems_install()
 {
   gems=(compass susy breakpoint)
   for i in ${gems[*]}; do
-    if gem list "$i" -i; then
+    if gem list "$i" -i > /dev/null 2>&1; then
       echo gem "$i" already installed
     else
       gem install "$i"
@@ -31,7 +31,7 @@ success_func()
 {
   echo "+ gulp created"
 
-  if npm install; then
+  if npm install > /dev/null 2>&1; then
     echo "+ npm install"
   else
     echo "- fail then intall npm"
@@ -71,7 +71,7 @@ echo "+ project directory created"
 cd "$project_name"/source
 
 if [ "$core_dir" = "git" ]; then
-  if git clone git@gitlab.com:StudiaUtEdamVivo/core.git; then
+  if git clone git@gitlab.com:StudiaUtEdamVivo/core.git > /dev/null 2>&1; then
     rm core/README.md && rm -rf core/.git
     mv core/* ./
     # mv ./core/{index.html,sass,js} ./
@@ -98,7 +98,7 @@ cd ../
 #module bundler
 if [ "$gulp_directory" = "git" ] && [ "$core_status" = "done" ]; then
 
-  if git clone git@gitlab.com:StudiaUtEdamVivo/gulp.git; then
+  if git clone git@gitlab.com:StudiaUtEdamVivo/gulp.git > /dev/null 2>&1; then
     mv ./gulp/{config.rb,gulpfile.js,package.json} ./
     rm -rf gulp
     success_func
@@ -117,17 +117,18 @@ else
 fi
 
 
-#log info
-# echo "========"
+# log info
+echo -e "\n--------------"
 # echo "all done"
-# echo "log:"
-# ls -la
+echo "log:"
+ls -la
+echo -e "--------------\n"
 
 if [ "$core_status" = "done" ]; then
   gems_install
   # npm run gulp production
   # echo "+ _production compiled"
-  echo "run gulp? (y/n)"
+  echo "run gulp (y/n)?"
   read -r -n 1 answer2
   if [ "$answer2" = "y" ]; then
     echo -e "\nok > gulp starting"
