@@ -2,8 +2,10 @@
 
 #Default variables
 sourceDirName="source/"
+nodeDirName="../"
 async="false"
 npminstall="false"
+check="not_exist"
 
 cloneLocal="false"
 GulpLocalDirectory="I://Dropbox/CODE/templates/gulp/"
@@ -11,6 +13,10 @@ CoreLocalDirectory="I://Dropbox/CODE/core/"
 NodeLocalDipendencies="I://Dropbox/CODE/node_modules"
 
 NodeCloudLink="https://www.dropbox.com/s/udbzwqpbcb634e3/node_modules.zip?dl=1"
+
+# Debugging variables
+# disableGulpRun="true"
+disableGulpRun="false"
 
 #Arguments check
 while :; do
@@ -115,15 +121,24 @@ extract_git()
   rm -rf $1
 }
 
+nodeModulesFunc()
+{
+  if [ -d "${nodeDirName}node_modules" ]; then
+    check="exist"
+  fi
+}
+
 gulpDependencies()
 {
   if [ "$npminstall" = "true" ]; then
     npm install &> /dev/null
+    mv node_modules $nodeDirName
   else
     if [ "$cloneLocal" = "true" ]; then
-      cp -r "$NodeLocalDipendencies" ./
+      cp -r "$NodeLocalDipendencies" $nodeDirName
     else
-      { curl -L "$NodeCloudLink" > node.zip && unzip node.zip && rm node.zip; } &> /dev/null
+      { curl -L "$NodeCloudLink" > node.zip && unzip node.zip -d $nodeDirName; } &> /dev/null
+        rm node.zip
     fi
   fi
 }
@@ -164,7 +179,7 @@ gems_install()
 
 runNpmGulp()
 {
-  if [ -d "$sourceDirName/sass/" ]; then
+  if [ -d "$sourceDirName/sass/" ] && [ "$disableGulpRun" = "false" ]; then
     echo "run gulp (y/n)?"
     read -r -n 1 answer2
     if [ "$answer2" = "y" ]; then
@@ -175,7 +190,7 @@ runNpmGulp()
       explorer .
     fi
   fi
-  echo "runNpmGulp end"
+  # echo "runNpmGulp end"
   # cd ~/Desktop
 }
 
@@ -188,7 +203,10 @@ if [ "$async" = "true" ]; then
     if [ "$npminstall" = "true" ]; then
       wait $PID2 &> /dev/null && echo "gulp: done"
     fi
-    gulpDependencies & PID3=$!
+  nodeModulesFunc
+    if [ "$check" = "not_exist" ]; then
+      gulpDependencies & PID3=$!
+    fi
   } 
   wait $PID &> /dev/null && echo "core: done"
   if [ "$npminstall" = "false" ]; then
@@ -200,7 +218,10 @@ if [ "$async" = "true" ]; then
 else
   gulpFunc
   coreFunc
-  gulpDependencies
+  nodeModulesFunc
+  if [ "$check" = "not_exist" ]; then
+    gulpDependencies
+  fi
   gems_install
   runNpmGulp
 fi
