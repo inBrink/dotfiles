@@ -15,6 +15,8 @@ Plug 'tpope/vim-projectionist'
 Plug 'kshenoy/vim-signature'
 Plug 'mtth/scratch.vim'
 Plug 'vimwiki/vimwiki'
+" Plug 'vim-syntastic/syntastic'
+
 
 " Splits, windows, explorers
 Plug 'scrooloose/nerdtree', { 'on':  [ 'NERDTreeToggle', 'NERDTreeFind' ] } " F8 / <leader>e 
@@ -70,6 +72,7 @@ Plug 'reedes/vim-colors-pencil'
 " Plug 'larsbs/vimterial'
 " Plug 'ajh17/Spacegray.vim'
 Plug 'ayu-theme/ayu-vim'
+Plug 'kabbamine/yowish.vim'
 call plug#end()
 " }}}
 
@@ -77,7 +80,7 @@ call plug#end()
 " Basic {{{
 let mapleader = "\<Space>"
 let maplocalleader = "\\"
-set textwidth=70
+" set textwidth=70
 set nowrap
 set shortmess+=c                        " User defined completion (^U^N^P) not work :)
 set number                              " line's number
@@ -85,8 +88,8 @@ set number                              " line's number
 set shortmess=a                         " avoiding the HIT ENTER to continue
 set scrolloff=5                         " how many lines you can see then scrolling
 set hidden                              " change buffer without saving(!) current
-" set splitbelow                          " vertical split open below
-" set splitright                          " horizontal split open right
+set splitbelow                          " vertical split open below
+set splitright                          " horizontal split open right
 set nohlsearch                          " search results without highlights
 set encoding=utf-8                      " The encoding displayed
 set fileencoding=utf-8                  " The encoding written to file
@@ -171,7 +174,8 @@ endif
 " Colorscheme/themes {{{
 " colorscheme PaperColor
   " colorscheme pencil
-  colorscheme onedark
+  " colorscheme onedark
+  colorscheme yowish
 
   " set termguicolors
   " let ayucolor="light" "mirage, dark
@@ -209,6 +213,12 @@ let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 let g:SuperTabDefaultCompletionType = '<C-n>'
 
 "====={ SirVer/ultisnips }=====
+  " let g:UltiSnipsExpandTrigger="<Tab>"
+  " if !exists("g:UltiSnipsJumpForwardTrigger")
+  "   let g:UltiSnipsJumpForwardTrigger = "<tab>"
+  " endif
+  " " let g:UltiSnipsJumpForwardTrigger="<c-j>"
+  " let g:UltiSnipsJumpBackwardTrigger="<S-Tab"
 let g:UltiSnipsExpandTrigger="<c-space>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
@@ -225,11 +235,15 @@ let g:EasyMotion_smartcase = 1
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 let g:EasyMotion_keys = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ<>;1234567890'
 " map <Leader> <Plug>(easymotion-prefix)
-map <Leader><Leader> <Plug>(easymotion-s)
+" map <Leader><Leader> <Plug>(easymotion-s)
+" one char window
+map <cr> <Plug>(easymotion-s)
+" two char window 
+" map <cr> <Plug>(easymotion-s2)
 map f <Plug>(easymotion-bd-fl)
 " map s <Plug>(easymotion-s)
 " nmap V V<Plug>(easymotion-bd-jk)
-vmap ; <Plug>(easymotion-bd-jk)
+" vmap ; <Plug>(easymotion-bd-jk)
 " nmap v v<Plug>(easymotion-bd-fl)
 " nmap v bv<Plug>(easymotion-bd-fl)
 
@@ -266,7 +280,7 @@ let NERDTreeIgnore=['node_modules[[dir]]']
 "     \ "Unknown"   : "?"
 "     \ }
 
-"====={ Xuyuanp/nerdtree-git-plugin }=====
+"====={ junegunn/vim-easy-align }=====
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 
@@ -278,6 +292,7 @@ map y <Plug>(highlightedyank)
 let g:highlightedyank_highlight_duration = 300
 
 "====={ zhaocai/GoldenView.Vim }=====
+let g:goldenview__enable_at_startup = 0
 " 1. split to tiled windows
 let g:goldenview__enable_default_mapping = 0
 " nmap <c-l> <Plug>GoldenViewSplit:e **/*
@@ -399,9 +414,9 @@ let g:ctrlp_mruf_case_sensitive = 1
 " }}}
 
 "====={ xolox/vim-session }=====
-nnoremap <Leader>ss :SaveSession 
-nnoremap <Leader>so :OpenSession 
-nnoremap <Leader>sr :RestartVim<cr>
+nnoremap <Leader>ss :SaveSession! 
+nnoremap <Leader>so :OpenSession! 
+nnoremap <Leader>sr :RestartVim!<cr>
 " nnoremap <Leader>ss :mksession! ~\vimfiles\sessions\
 " nnoremap <Leader>so :silent! source ~\vimfiles\sessions\
 
@@ -421,6 +436,16 @@ let g:markdown_composer_autostart = 0
 let g:scratch_insert_autohide = 0
 let g:scratch_persistence_file = '_scratch.vim'
 
+"====={ vim-syntastic/syntastic }=====
+let g:syntastic_javascript_checkers=['eslint']
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
 " }}}
 
 
@@ -433,6 +458,9 @@ if has("win32")
 endif
 
 nnoremap <F12> :MaximizerToggle!<cr>
+
+xnoremap <S-Insert> "*p
+xnoremap <S-Del> "*y
 
 nnoremap Q @q
 
@@ -454,10 +482,10 @@ nnoremap Y :normal yg_<cr>
 vnoremap y y']
 
 " nnoremap p ]p']
-nnoremap p p=`]
-vnoremap p p=`]
-nnoremap P P=`]
-vnoremap P P=`]
+nnoremap p p=`]`]
+vnoremap p p=`]`]
+nnoremap P P=`]`]
+vnoremap P P=`]`]
 
 " Switching between current and last buffer
 nnoremap <Bs> <c-^>
@@ -467,6 +495,27 @@ nnoremap k gk
 
 nnoremap ZZ :xa<cr>
 nnoremap ZQ :qa!<cr>
+
+" prevent * from jumping to the next match
+nnoremap * *<C-o>
+" nnoremap *:keepjumps normal! mi*`i<cr>
+
+" last word to upper case
+inoremap <c-u> <esc>viwUea
+
+" auto-expanding () {} [] '' "" ``
+" inoremap (; (<cr>);<Esc>O
+" inoremap (, (<cr>),<Esc>O
+" inoremap {; {<cr>};<Esc>O
+" inoremap {, {<cr>},<Esc>O
+" inoremap [; [<cr>];<Esc>O
+" inoremap [, [<cr>],<Esc>O
+
+" go to next argument
+" inoremap ,, <esc>la, ''<esc>i
+inoremap ,, <esc>la, 
+inoremap >>  => 
+
 " }}}
 
 
@@ -540,9 +589,15 @@ augroup END
   " autocmd BufWinLeave *vimrc mV
 " augroup END
 
+augroup Html
+  autocmd!
+  autocmd FileType html nnoremap <buffer> <silent> <leader>i :w<cr>:!npm start<cr>
+augroup END
+
 augroup Python
   autocmd!
   autocmd FileType python nnoremap <buffer> <silent> <leader>i :w<cr>:!python3 %<cr><cr>
+  " autocmd FileType python nnoremap <buffer> <silent> <leader>I :w<cr>:!python3 | clip %<cr><cr>
 augroup END
 
 augroup Wiki
@@ -566,6 +621,7 @@ augroup END
 
 augroup Markdown
   autocmd!
+  autocmd FileType javascript nnoremap <buffer> <silent> <leader>i :ComposerStart<cr>
   autocmd FileType md nnoremap <buffer> <silent> <leader>p :ComposerStart<cr>
 augroup END
 
@@ -581,5 +637,4 @@ command! Day colorscheme PaperColor | set background=light | syntax on | syntax 
 command! BigFont set guifont=Hack:h16
 command! SmallFont set guifont=Anonymous_Pro:h11
 command! Vim :tabe I://Dropbox/dotfiles/_vimrc
-command! Wiki :tabe I://Dropbox/dotfiles/_vimrc
 "}}}
